@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عالم الأطفال</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --kids-bg: #FFF9F0;
+      --sun: #FFD93D;
+      --sky: #6BCFF6;
+      --grass: #6BCB77;
+      --coral: #FF6B6B;
+      --purple: #A66CFF;
+      --peach: #FF9A3C;
+      --mint: #4ECDC4;
+      --white: #FFFFFF;
+      --dark: #2C2C54;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Baloo Bhaijaan 2', 'Arial', sans-serif;
+      direction: rtl;
+      background: var(--kids-bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .app-root {
+      max-width: 420px;
+      margin: 0 auto;
+      padding-bottom: 80px;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, #6BCFF6 0%, #A66CFF 100%);
+      padding: 16px 20px 24px;
+      border-radius: 0 0 30px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '☁️'; font-size: 40px; position: absolute; top: 8px; right: 16px; opacity: 0.5;
+    }
+    .header::after {
+      content: '☁️'; font-size: 28px; position: absolute; top: 14px; left: 20px; opacity: 0.4;
+    }
+    .header-stars {
+      display: flex; justify-content: center; gap: 6px; margin-bottom: 6px;
+    }
+    .star { font-size: 20px; animation: twinkle 1.5s infinite alternate; }
+    .star:nth-child(2) { animation-delay: 0.3s; }
+    .star:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes twinkle {
+      from { opacity: 0.5; transform: scale(0.9); }
+      to   { opacity: 1;   transform: scale(1.1); }
+    }
+
+    .header h1 {
+      font-size: 26px; font-weight: 800; color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      line-height: 1.2;
+    }
+    .header p { font-size: 14px; color: rgba(255,255,255,0.9); margin-top: 4px; }
+
+    .mascot {
+      font-size: 56px; margin: 10px 0 4px;
+      display: block;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex; gap: 8px; padding: 16px 16px 8px;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex-shrink: 0;
+      padding: 10px 18px;
+      border-radius: 50px;
+      border: none;
+      font-family: inherit;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      background: white;
+      color: #888;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.2s;
+    }
+    .tab-btn.active { color: white; transform: scale(1.05); box-shadow: 0 4px 14px rgba(0,0,0,0.18); }
+    .tab-btn[data-tab="letters"].active  { background: var(--coral); }
+    .tab-btn[data-tab="numbers"].active  { background: var(--purple); }
+    .tab-btn[data-tab="animals"].active  { background: var(--grass); }
+    .tab-btn[data-tab="colors"].active   { background: var(--peach); }
+    .tab-btn[data-tab="quiz"].active     { background: var(--mint); }
+
+    /* CONTENT PANELS */
+    .panel { display: none; padding: 8px 16px; }
+    .panel.active { display: block; }
+
+    .section-title {
+      font-size: 20px; font-weight: 800; color: var(--dark);
+      text-align: center; margin-bottom: 16px;
+    }
+
+    /* LETTERS GRID */
+    .letters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .letter-card {
+      background: white;
+      border-radius: 20px;
+      padding: 14px 8px 10px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      transition: transform 0.18s, box-shadow 0.18s;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    .letter-card:active { transform: scale(0.93); }
+    .letter-card:nth-child(3n+1) { border-color: #FF6B6B33; }
+    .letter-card:nth-child(3n+2) { border-color: #A66CFF33; }
+    .letter-card:nth-child(3n+3) { border-color: #6BCB7733; }
+    .letter-big {
+      font-size: 36px; font-weight: 800; line-height: 1;
+      display: block;
+    }
+    .letter-card:nth-child(3n+1) .letter-big { color: var(--coral); }
+    .letter-card:nth-child(3n+2) .letter-big { color: var(--purple); }
+    .letter-card:nth-child(3n+3) .letter-big { color: var(--grass); }
+    .letter-name  { font-size: 13px; font-weight: 600; color: #666; margin-top: 4px; }
+    .letter-example { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+    /* NUMBERS GRID */
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .number-card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px 12px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      transition: transform 0.18s;
+      position: relative;
+    }
+    .number-card:active { transform: scale(0.93); }
+    .number-arabic  { font-size: 44px; font-weight: 800; line-height: 1; }
+    .number-western { font-size: 18px; font-weight: 600; color: #aaa; }
+    .number-dots    { font-size: 22px; margin: 6px 0 2px; letter-spacing: 2px; }
+    .number-word    { font-size: 14px; font-weight: 600; }
+
+    .number-card:nth-child(1)  .number-arabic, .number-card:nth-child(1)  .number-word { color: var(--coral); }
+    .number-card:nth-child(2)  .number-arabic, .number-card:nth-child(2)  .number-word { color: var(--purple); }
+    .number-card:nth-child(3)  .number-arabic, .number-card:nth-child(3)  .number-word { color: var(--mint); }
+    .number-card:nth-child(4)  .number-arabic, .number-card:nth-child(4)  .number-word { color: var(--peach); }
+    .number-card:nth-child(5)  .number-arabic, .number-card:nth-child(5)  .number-word { color: var(--grass); }
+    .number-card:nth-child(6)  .number-arabic, .number-card:nth-child(6)  .number-word { color: #FF6B9D; }
+    .number-card:nth-child(7)  .number-arabic, .number-card:nth-child(7)  .number-word { color: #6BCFF6; }
+    .number-card:nth-child(8)  .number-arabic, .number-card:nth-child(8)  .number-word { color: var(--coral); }
+    .number-card:nth-child(9)  .number-arabic, .number-card:nth-child(9)  .number-word { color: var(--purple); }
+    .number-card:nth-child(10) .number-arabic, .number-card:nth-child(10) .number-word { color: #FFD93D; }
+
+    /* ANIMALS */
+    .animals-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .animal-card {
+      background: white;
+      border-radius: 22px;
+      padding: 18px 12px 14px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .animal-card:active { transform: scale(0.92); }
+    .animal-emoji    { font-size: 52px; display: block; }
+    .animal-name-ar  { font-size: 18px; font-weight: 800; color: var(--dark); margin-top: 6px; }
+    .animal-name-sound { font-size: 12px; color: #aaa; margin-top: 2px; }
+    .animal-card:nth-child(odd)  { background: linear-gradient(135deg, #fff8f0, #fff); }
+    .animal-card:nth-child(even) { background: linear-gradient(135deg, #f0f8ff, #fff); }
+
+    /* COLORS */
+    .colors-list { display: flex; flex-direction: column; gap: 12px; }
+    .color-row {
+      background: white;
+      border-radius: 18px;
+      padding: 14px 18px;
+      display: flex; align-items: center; gap: 16px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+      transition: transform 0.18s;
+    }
+    .color-row:active { transform: scale(0.97); }
+    .color-circle {
+      width: 52px; height: 52px; border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .color-info { flex: 1; }
+    .color-name-ar   { font-size: 22px; font-weight: 800; }
+    .color-name-desc { font-size: 13px; color: #aaa; margin-top: 2px; }
+    .color-objects   { font-size: 20px; }
+
+    /* QUIZ */
+    .quiz-area { text-align: center; }
+    .quiz-progress {
+      display: flex; justify-content: center; gap: 6px; margin-bottom: 16px;
+    }
+    .progress-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #ddd; transition: background 0.3s;
+    }
+    .progress-dot.done    { background: var(--mint); }
+    .progress-dot.current { background: var(--peach); transform: scale(1.2); }
+
+    .quiz-card {
+      background: white;
+      border-radius: 24px;
+      padding: 30px 20px 24px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+    }
+    .quiz-emoji    { font-size: 72px; display: block; margin-bottom: 12px; }
+    .quiz-question { font-size: 20px; font-weight: 700; color: var(--dark); }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .quiz-opt {
+      background: white;
+      border: 2.5px solid #eee;
+      border-radius: 16px;
+      padding: 14px 8px;
+      font-family: inherit;
+      font-size: 18px; font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s;
+      color: var(--dark);
+    }
+    .quiz-opt:active  { transform: scale(0.95); }
+    .quiz-opt.correct { background: #d4f8dc; border-color: #6BCB77; color: #2a7a3b; }
+    .quiz-opt.wrong   { background: #ffd4d4; border-color: #FF6B6B; color: #a02020; }
+
+    .quiz-result {
+      font-size: 22px; font-weight: 800; margin-top: 12px;
+      min-height: 36px; text-align: center;
+    }
+    .quiz-result.correct-msg { color: var(--grass); }
+    .quiz-result.wrong-msg   { color: var(--coral); }
+
+    .quiz-next-btn {
+      background: var(--mint);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 40px;
+      font-family: inherit;
+      font-size: 18px; font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.18s, opacity 0.18s;
+      display: none;
+    }
+    .quiz-next-btn.visible { display: inline-block; }
+    .quiz-next-btn:active  { transform: scale(0.96); }
+
+    .stars-display { margin-top: 16px; font-size: 32px; letter-spacing: 4px; }
+
+    /* POPUP */
+    .sound-popup {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0);
+      background: rgba(44,44,84,0.92);
+      color: white; border-radius: 24px;
+      padding: 20px 32px; text-align: center;
+      font-size: 22px; font-weight: 800;
+      z-index: 999; pointer-events: none;
+      transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), opacity 0.25s;
+      opacity: 0;
+    }
+    .sound-popup.show { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+    .sound-popup .popup-emoji { font-size: 52px; display: block; margin-bottom: 8px; }
+
+    /* SCORE BADGE */
+    .score-badge {
+      position: fixed; top: 16px; left: 16px;
+      background: var(--sun); color: #5a3a00;
+      border-radius: 50px; padding: 6px 14px;
+      font-weight: 800; font-size: 16px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      z-index: 100;
+      font-family: 'Baloo Bhaijaan 2', 'Arial', sans-serif;
+    }
+
+    /* CONFETTI */
+    .confetti-burst {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none; z-index: 998; display: none;
+    }
+    .confetti-piece {
+      position: absolute; width: 10px; height: 10px; border-radius: 2px;
+      animation: confettiFall 1.2s ease-in forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(-10px) rotate(0deg);   opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="score-badge">⭐ <span id="score">0</span></div>
+
+<div class="app-root">
+
+  <div class="header">
+    <span class="mascot">🦁</span>
+    <div class="header-stars">
+      <span class="star">⭐</span><span class="star">🌟</span><span class="star">⭐</span>
+    </div>
+    <h1>عالم الأطفال</h1>
+    <p>تعلّم وامرح كل يوم!</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="letters">🔤 الحروف</button>
+    <button class="tab-btn" data-tab="numbers">🔢 الأرقام</button>
+    <button class="tab-btn" data-tab="animals">🐾 الحيوانات</button>
+    <button class="tab-btn" data-tab="colors">🎨 الألوان</button>
+    <button class="tab-btn" data-tab="quiz">🎮 اختبر نفسك</button>
+  </div>
+
+  <!-- LETTERS -->
+  <div class="panel active" id="panel-letters">
+    <div class="section-title">🔤 تعلّم الحروف</div>
+    <div class="letters-grid" id="letters-grid"></div>
+  </div>
+
+  <!-- NUMBERS -->
+  <div class="panel" id="panel-numbers">
+    <div class="section-title">🔢 تعلّم الأرقام</div>
+    <div class="numbers-grid" id="numbers-grid"></div>
+  </div>
+
+  <!-- ANIMALS -->
+  <div class="panel" id="panel-animals">
+    <div class="section-title">🐾 عالم الحيوانات</div>
+    <div class="animals-grid" id="animals-grid"></div>
+  </div>
+
+  <!-- COLORS -->
+  <div class="panel" id="panel-colors">
+    <div class="section-title">🎨 الألوان الجميلة</div>
+    <div class="colors-list" id="colors-list"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="panel" id="panel-quiz">
+    <div class="section-title">🎮 اختبر معلوماتك!</div>
+    <div class="quiz-area">
+      <div class="quiz-progress" id="quiz-progress"></div>
+      <div class="quiz-card">
+        <span class="quiz-emoji" id="quiz-emoji">🦁</span>
+        <div class="quiz-question" id="quiz-question">ما اسم هذا الحيوان؟</div>
+      </div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-result" id="quiz-result"></div>
+      <button class="quiz-next-btn" id="quiz-next">السؤال التالي ←</button>
+      <div class="stars-display" id="stars-display"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="sound-popup" id="popup">
+  <span class="popup-emoji" id="popup-emoji">🔤</span>
+  <span id="popup-text"></span>
+</div>
+
+<div class="confetti-burst" id="confetti"></div>
+
+<script>
+  const letters = [
+    {char:'أ', name:'ألف',  ex:'أسد'},
+    {char:'ب', name:'باء',  ex:'بطة'},
+    {char:'ت', name:'تاء',  ex:'تفاحة'},
+    {char:'ث', name:'ثاء',  ex:'ثعلب'},
+    {char:'ج', name:'جيم',  ex:'جمل'},
+    {char:'ح', name:'حاء',  ex:'حصان'},
+    {char:'خ', name:'خاء',  ex:'خروف'},
+    {char:'د', name:'دال',  ex:'دب'},
+    {char:'ذ', name:'ذال',  ex:'ذئب'},
+    {char:'ر', name:'راء',  ex:'رمّانة'},
+    {char:'ز', name:'زاي',  ex:'زرافة'},
+    {char:'س', name:'سين',  ex:'سمكة'},
+    {char:'ش', name:'شين',  ex:'شمس'},
+    {char:'ص', name:'صاد',  ex:'صقر'},
+    {char:'ط', name:'طاء',  ex:'طائر'},
+    {char:'ع', name:'عين',  ex:'عصفور'},
+    {char:'غ', name:'غين',  ex:'غزال'},
+    {char:'ف', name:'فاء',  ex:'فراشة'},
+  ];
+
+  const numbers = [
+    {ar:'١',  n:1,  word:'واحد',   dots:'●'},
+    {ar:'٢',  n:2,  word:'اثنان',  dots:'●●'},
+    {ar:'٣',  n:3,  word:'ثلاثة',  dots:'●●●'},
+    {ar:'٤',  n:4,  word:'أربعة',  dots:'●●●●'},
+    {ar:'٥',  n:5,  word:'خمسة',   dots:'●●●●●'},
+    {ar:'٦',  n:6,  word:'ستة',    dots:'●●●●●●'},
+    {ar:'٧',  n:7,  word:'سبعة',   dots:'●●●●●●●'},
+    {ar:'٨',  n:8,  word:'ثمانية', dots:'●●●●●●●●'},
+    {ar:'٩',  n:9,  word:'تسعة',   dots:'●●●●●●●●●'},
+    {ar:'١٠', n:10, word:'عشرة',   dots:'●●●●●●●●●●'},
+  ];
+
+  const animals = [
+    {emoji:'🦁', name:'أسد',         sound:'زئير'},
+    {emoji:'🐘', name:'فيل',         sound:'صوت الفيل'},
+    {emoji:'🐯', name:'نمر',         sound:'هدير'},
+    {emoji:'🐬', name:'دلفين',       sound:'صفير'},
+    {emoji:'🦒', name:'زرافة',       sound:'صامت'},
+    {emoji:'🐧', name:'بطريق',       sound:'صياح'},
+    {emoji:'🐊', name:'تمساح',       sound:'فحيح'},
+    {emoji:'🦅', name:'نسر',         sound:'صرخة'},
+    {emoji:'🐢', name:'سلحفاة',      sound:'صامتة'},
+    {emoji:'🦊', name:'ثعلب',        sound:'نباح'},
+    {emoji:'🐼', name:'باندا',       sound:'تصفير'},
+    {emoji:'🦓', name:'حمار وحشي',   sound:'نهيق'},
+  ];
+
+  const colors = [
+    {bg:'#FF6B6B', name:'أحمر',      desc:'لون الحب',       objects:'🍎🌹❤️'},
+    {bg:'#6BCFF6', name:'أزرق',      desc:'لون السماء',     objects:'🌊🦋💙'},
+    {bg:'#6BCB77', name:'أخضر',      desc:'لون النباتات',   objects:'🌿🌳🍃'},
+    {bg:'#FFD93D', name:'أصفر',      desc:'لون الشمس',      objects:'⭐🌻🍋'},
+    {bg:'#A66CFF', name:'بنفسجي',    desc:'لون الزهور',     objects:'🍇🌸💜'},
+    {bg:'#FF9A3C', name:'برتقالي',   desc:'لون الفاكهة',    objects:'🍊🎃🔥'},
+    {bg:'#FF6B9D', name:'وردي',      desc:'لون الفرح',      objects:'🌸🎀🌷'},
+    {bg:'#8B4513', name:'بني',       desc:'لون الأرض',      objects:'🍫🌰🎶'},
+  ];
+
+  const quizQuestions = [
+    {emoji:'🦁', question:'ما اسم هذا الحيوان؟',  correct:'أسد',      opts:['أسد','نمر','فيل','ثعلب']},
+    {emoji:'🍎', question:'ما لون هذه التفاحة؟',  correct:'أحمر',     opts:['أزرق','أحمر','أصفر','أخضر']},
+    {emoji:'🐘', question:'ما اسم هذا الحيوان؟',  correct:'فيل',      opts:['فيل','جمل','حصان','أسد']},
+    {emoji:'☀️', question:'ما لون الشمس؟',         correct:'أصفر',     opts:['أحمر','أزرق','أصفر','أخضر']},
+    {emoji:'🦒', question:'ما اسم هذا الحيوان؟',  correct:'زرافة',    opts:['زرافة','نمر','أسد','غزال']},
+    {emoji:'🍌', question:'ما لون الموزة؟',        correct:'أصفر',     opts:['أخضر','أصفر','أحمر','بنفسجي']},
+    {emoji:'🐬', question:'ما اسم هذا الحيوان؟',  correct:'دلفين',    opts:['سمكة','دلفين','حوت','قرش']},
+    {emoji:'🍇', question:'ما لون العنب؟',         correct:'بنفسجي',   opts:['أحمر','أخضر','بنفسجي','أزرق']},
+  ];
+
+  let score = 0;
+  let quizIdx = 0;
+  let answered = false;
+  let quizResults = [];
+
+  function showPopup(emoji, text) {
+    const p = document.getElementById('popup');
+    document.getElementById('popup-emoji').textContent = emoji;
+    document.getElementById('popup-text').textContent  = text;
+    p.classList.add('show');
+    setTimeout(() => p.classList.remove('show'), 1800);
+  }
+
+  function addScore(pts) {
+    score += pts;
+    document.getElementById('score').textContent = score;
+  }
+
+  function buildLetters() {
+    const g = document.getElementById('letters-grid');
+    g.innerHTML = '';
+    letters.forEach(l => {
+      const d = document.createElement('div');
+      d.className = 'letter-card';
+      d.innerHTML = `<span class="letter-big">${l.char}</span>
+                     <div class="letter-name">${l.name}</div>
+                     <div class="letter-example">مثال: ${l.ex}</div>`;
+      d.onclick = () => { showPopup(l.char, `${l.name} — ${l.ex}`); addScore(1); };
+      g.appendChild(d);
+    });
+  }
+
+  function buildNumbers() {
+    const g = document.getElementById('numbers-grid');
+    g.innerHTML = '';
+    numbers.forEach(n => {
+      const dots = n.dots.substring(0, Math.min(n.n, 5));
+      const d = document.createElement('div');
+      d.className = 'number-card';
+      d.innerHTML = `<div class="number-arabic">${n.ar}</div>
+                     <div class="number-western">${n.n}</div>
+                     <div class="number-dots">${dots}</div>
+                     <div class="number-word">${n.word}</div>`;
+      d.onclick = () => { showPopup(n.ar, n.word); addScore(1); };
+      g.appendChild(d);
+    });
+  }
+
+  function buildAnimals() {
+    const g = document.getElementById('animals-grid');
+    g.innerHTML = '';
+    animals.forEach(a => {
+      const d = document.createElement('div');
+      d.className = 'animal-card';
+      d.innerHTML = `<span class="animal-emoji">${a.emoji}</span>
+                     <div class="animal-name-ar">${a.name}</div>
+                     <div class="animal-name-sound">🔊 ${a.sound}</div>`;
+      d.onclick = () => { showPopup(a.emoji, a.name); addScore(1); };
+      g.appendChild(d);
+    });
+  }
+
+  function buildColors() {
+    const g = document.getElementById('colors-list');
+    g.innerHTML = '';
+    colors.forEach(c => {
+      const firstObj = c.objects.split(/(?<=\p{Emoji})/u)[0] || '●';
+      const d = document.createElement('div');
+      d.className = 'color-row';
+      d.innerHTML = `<div class="color-circle" style="background:${c.bg}">${firstObj}</div>
+                     <div class="color-info">
+                       <div class="color-name-ar" style="color:${c.bg}">${c.name}</div>
+                       <div class="color-name-desc">${c.desc}</div>
+                     </div>
+                     <div class="color-objects">${c.objects}</div>`;
+      d.onclick = () => { showPopup(firstObj, c.name); addScore(1); };
+      g.appendChild(d);
+    });
+  }
+
+  function buildQuiz() {
+    const q = quizQuestions[quizIdx % quizQuestions.length];
+    answered = false;
+
+    document.getElementById('quiz-emoji').textContent    = q.emoji;
+    document.getElementById('quiz-question').textContent = q.question;
+    document.getElementById('quiz-result').textContent   = '';
+    document.getElementById('quiz-result').className     = 'quiz-result';
+    document.getElementById('quiz-next').classList.remove('visible');
+
+    const prog = document.getElementById('quiz-progress');
+    prog.innerHTML = '';
+    quizQuestions.forEach((_, i) => {
+      const dot = document.createElement('div');
+      const cur = quizIdx % quizQuestions.length;
+      dot.className = 'progress-dot' + (i < cur ? ' done' : i === cur ? ' current' : '');
+      prog.appendChild(dot);
+    });
+
+    const opts = [...q.opts].sort(() => Math.random() - 0.5);
+    const optsEl = document.getElementById('quiz-options');
+    optsEl.innerHTML = '';
+    opts.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className  = 'quiz-opt';
+      btn.textContent = opt;
+      btn.onclick = () => {
+        if (answered) return;
+        answered = true;
+        if (opt === q.correct) {
+          btn.classList.add('correct');
+          document.getElementById('quiz-result').textContent = '🎉 أحسنت! إجابة صحيحة!';
+          document.getElementById('quiz-result').className   = 'quiz-result correct-msg';
+          addScore(5);
+          quizResults.push(true);
+          launchConfetti();
+        } else {
+          btn.classList.add('wrong');
+          document.getElementById('quiz-result').textContent = `❌ الإجابة الصحيحة: ${q.correct}`;
+          document.getElementById('quiz-result').className   = 'quiz-result wrong-msg';
+          quizResults.push(false);
+          optsEl.querySelectorAll('.quiz-opt').forEach(b => {
+            if (b.textContent === q.correct) b.classList.add('correct');
+          });
+        }
+        document.getElementById('quiz-next').classList.add('visible');
+        const stars = quizResults.filter(Boolean).length;
+        document.getElementById('stars-display').textContent = '⭐'.repeat(Math.min(stars, 5));
+      };
+      optsEl.appendChild(btn);
+    });
+  }
+
+  function launchConfetti() {
+    const c = document.getElementById('confetti');
+    c.style.display = 'block';
+    c.innerHTML = '';
+    const cols = ['#FF6B6B','#6BCFF6','#6BCB77','#FFD93D','#A66CFF','#FF9A3C'];
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      const size = (8 + Math.random() * 8) + 'px';
+      p.style.left             = Math.random() * 100 + '%';
+      p.style.background       = cols[Math.floor(Math.random() * cols.length)];
+      p.style.animationDelay   = (Math.random() * 0.6) + 's';
+      p.style.width = p.style.height = size;
+      c.appendChild(p);
+    }
+    setTimeout(() => { c.style.display = 'none'; }, 1500);
+  }
+
+  document.getElementById('quiz-next').onclick = () => { quizIdx++; buildQuiz(); };
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p  => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+      if (btn.dataset.tab === 'quiz') buildQuiz();
+    };
+  });
+
+  buildLetters();
+  buildNumbers();
+  buildAnimals();
+  buildColors();
+</script>
+</body>
+</html>
